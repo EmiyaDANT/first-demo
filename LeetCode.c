@@ -20,8 +20,10 @@ typedef struct List_W
 // 初始化一个空的线性表
 void InitList(Element *L)
 {
-    L = (PElement)calloc(1,sizeof(Element));
-    memset(L->ID,0,sizeof(MAX_LENTH));
+    for (int i = 0; i < MAX_LENTH; i++)
+    {
+        L->ID[i]=0;
+    }
     L->Length=0;
     fprintf(stdout,"初始化线性表成功\n");
 }
@@ -77,8 +79,9 @@ void ListInsert(Element *L,int i,HaoMa e)
     }
     else
     {
+        int pre = L->ID[i];
         // 非常之巧妙                                                                                                               
-        for (int j = i; j < L->Length; j++)
+        for (int j = (L->Length)-1; j >= i; j--)
         {
             L->ID[j]=L->ID[j-1];
         }
@@ -99,29 +102,37 @@ void ListDelete(Element *L,int i,HaoMa *e)
         *e=L->ID[i-1];
         for (int j = i; j < L->Length; j++)
         {
-            L->ID[i-1]=L->ID[i];
+            L->ID[j-1]=L->ID[j];
         }
         (L->Length)--;
-        L->ID[L->Length]=0;
+        L->ID[L->Length] = 0;
     }
+}
+
+int ListLength(Element L)
+{
+    return L.Length;
 }
 
 
 
 void main()
 {
-    Element *L;
-    InitList(L);
-    for (int i = 1; i <= 200; i++)
+    Element L;
+    InitList(&L);
+    for (int i = 1; i <= 20; i++)
     {
-        ListInsert(L,i,i*2);
+        ListInsert(&L,i,i*2);
     }
-    for (int i = 0; i < 100; i++)
+    HaoMa e;
+    ListDelete(&L, 10, &e);
+    ListInsert(&L,2,100);
+    for (int i = 0; i < ListLength(L); i++)
     {
-        printf("%d ",L->ID[i]);
+        printf("%d ",L.ID[i]);
     }
-    status i = LocateElem(*L,100);
-    printf("\n%d",i);
+    printf("\n%d",e);
+    printf("\n%d", ListLength(L));
 }
 
 
